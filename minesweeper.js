@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
   var board = {
-    cells: [ {row: 0, col: 0, isMine: true, hidden: true}, {row: 0, col: 1, isMine: false, hidden: true}, {row: 0, col: 2, isMine: true, hidden: true},
+    cells: [ {row: 0, col: 0, isMine: false, hidden: true}, {row: 0, col: 1, isMine: false, hidden: true}, {row: 0, col: 2, isMine: true, hidden: true},
              {row: 1, col: 0, isMine: false, hidden: true}, {row: 1, col: 1, isMine: true, hidden: true}, {row: 1, col: 2, isMine: false, hidden: true},
              {row: 2, col: 0, isMine: false, hidden: true}, {row: 2, col: 1, isMine: true, hidden: true}, {row: 2, col: 2, isMine: false, hidden: true}
            ]
@@ -20,8 +20,47 @@ function startGame () {
 //
 // 1. Are all of the cells that are NOT mines visible?
 // 2. Are all of the mines marked?
-function checkForWin () {
+document.addEventListener("click", function() {
+  checkForWin()
+});
+document.addEventListener("contextmenu", function() {
+  checkForWin()
+});
 
+function checkForWin () {
+  var flagged = 0;
+  var cleared = 0;
+
+  function checkIfHidden() {
+    for (var a = 0; a < board.cells.length; a++) {
+    if (board.cells[a].hidden === true) {
+      return
+      }
+    }
+  }
+  function checkIfFlagged() {
+    for (var b = 0; b < board.cells.length; b++) {
+    if (board.cells[b].isMine === true && board.cells[b].isMarked === true) {
+      flagged += 1;
+      }
+    }
+  }
+
+  function checkIfCleared() {
+    for (var c = 0; c < board.cells.length; c++) {
+    if (board.cells[c].hidden === false) {
+      cleared += 1;
+      }
+    }
+  }
+
+  checkIfHidden();
+  checkIfFlagged();
+  checkIfCleared();
+
+  if (board.cells.length === flagged + cleared) {
+    lib.displayMessage('<strong>You Win!</strong>');
+  }
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
   //   lib.displayMessage('You win!')
